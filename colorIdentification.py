@@ -21,7 +21,7 @@ image = cv2.imread(args["image"])
 # convert the image to hsv
 hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-# save image dimensions
+# save the image dimensions
 w = image.shape[1]
 h = image.shape[0]
 
