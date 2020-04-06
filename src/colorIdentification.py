@@ -54,18 +54,13 @@ w = image.shape[1]
 h = image.shape[0]
 
 # initialising color images for each boundary in BGR
-# TODO: can simplify this with a loop
-red = np.zeros((h, w, 3), np.uint8)
-red[:, 0:w] = utils.single_colors[0]
-yellow = np.zeros((h, w, 3), np.uint8)
-yellow[:, 0:w] = utils.single_colors[1]
-green = np.zeros((h, w, 3), np.uint8)
-green[:, 0:w] = utils.single_colors[2]
-blue = np.zeros((h, w, 3), np.uint8)
-blue[:, 0:w] = utils.single_colors[3]
-pink = np.zeros((h, w, 3), np.uint8)
-pink[:, 0:w] = utils.single_colors[4]
-single_color_images = [red, yellow, green, blue, pink]
+single_color_images = []
+k = 0
+for color in utils.single_colors:
+    color_image = np.zeros((h, w, 3), np.uint8)
+    color_image[:, 0:w] = utils.single_colors[k]
+    single_color_images.append(color_image)
+    k = k+1
 
 combo = []
 # loop over the boundaries
@@ -80,7 +75,9 @@ for (lower, upper) in utils.hsv_bounds:
     output = cv2.bitwise_and(
         single_color_images[i], utils.single_colors[i], mask=mask)
 
-    # # comment/uncomment this block to enable/disable output during process
+    # # comment/uncomment this block to 
+    # # enable/disable progress output during processing
+    # print("HSV Bound ", i+1, " (upper limit) = ", upper, " (click 'ENTER')")
     # # resize the image output window
     # scale = 0.7
     # width = int(w*scale)
@@ -91,7 +88,6 @@ for (lower, upper) in utils.hsv_bounds:
     # # show the images
     # cv2.imshow("images", np.hstack([image, output]))
     # cv2.waitKey(0)
-    # print("HSV Bound ", i+1, " (upper limit) = ", upper, " (click 'ENTER')")
 
     combo.append(output)
     i = i+1
