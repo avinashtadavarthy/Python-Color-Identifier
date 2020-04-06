@@ -4,17 +4,17 @@ import cv2
 import time
 import json
 import utils
+
+
 # function to combine images
-
-
-def combineImages(imgArray):
+def combine_images(imgArray):
     comboimg = np.zeros((h, w, 3), np.uint8)
     for img in imgArray:
         comboimg = cv2.add(comboimg, img)
     return comboimg
 
-
-def makeArray(image, colors):
+# function to make the image array
+def make_image_array(image, colors):
     print("Array building started...")
     start = time.time()
     result = []
@@ -29,7 +29,7 @@ def makeArray(image, colors):
     print("Time taken: ", end-start)
     return np.array(result)
 
-
+# function to print image array to json file
 def print_to_file(image):
     lists = image.tolist()
     json_str = json.dumps(lists)
@@ -75,7 +75,7 @@ for (lower, upper) in utils.hsv_bounds:
     output = cv2.bitwise_and(
         single_color_images[i], utils.single_colors[i], mask=mask)
 
-    # # comment/uncomment this block to 
+    # # comment/uncomment this block to
     # # enable/disable progress output during processing
     # print("HSV Bound ", i+1, " (upper limit) = ", upper, " (click 'ENTER')")
     # # resize the image output window
@@ -93,8 +93,8 @@ for (lower, upper) in utils.hsv_bounds:
     i = i+1
 
 # resize the image output window
-comboimg = combineImages(combo)
-result = makeArray(comboimg, utils.single_colors)
+comboimg = combine_images(combo)
+result = make_image_array(comboimg, utils.single_colors)
 print(result)
 
 print_to_file(result)
