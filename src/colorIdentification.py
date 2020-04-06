@@ -3,7 +3,7 @@ import argparse
 import cv2
 import time
 import json
-
+import utils
 # function to combine images
 
 
@@ -54,34 +54,23 @@ w = image.shape[1]
 h = image.shape[0]
 
 # initialising color images for each boundary in BGR
-single_colors = [(0, 0, 255), (0, 221, 255), (0, 194, 0),
-                 (255, 0, 0), (255, 130, 220)]
 # TODO: can simplify this with a loop
 red = np.zeros((h, w, 3), np.uint8)
-red[:, 0:w] = single_colors[0]
+red[:, 0:w] = utils.single_colors[0]
 yellow = np.zeros((h, w, 3), np.uint8)
-yellow[:, 0:w] = single_colors[1]
+yellow[:, 0:w] = utils.single_colors[1]
 green = np.zeros((h, w, 3), np.uint8)
-green[:, 0:w] = single_colors[2]
+green[:, 0:w] = utils.single_colors[2]
 blue = np.zeros((h, w, 3), np.uint8)
-blue[:, 0:w] = single_colors[3]
+blue[:, 0:w] = utils.single_colors[3]
 pink = np.zeros((h, w, 3), np.uint8)
-pink[:, 0:w] = single_colors[4]
+pink[:, 0:w] = utils.single_colors[4]
 single_color_images = [red, yellow, green, blue, pink]
-
-# define HSV boundaries (add more over here)
-hsv_bounds = [
-    ([0, 0, 0], [10, 255, 255]),  # red
-    ([11, 0, 0], [35, 255, 255]),  # yellow
-    ([36, 0, 0], [70, 255, 255]),  # green
-    ([71, 0, 0], [140, 255, 255]),  # blue
-    ([141, 0, 0], [179, 255, 255]),  # pink
-]
 
 combo = []
 # loop over the boundaries
 i = 0
-for (lower, upper) in hsv_bounds:
+for (lower, upper) in utils.hsv_bounds:
     # create NumPy arrays from the boundaries
     lower = np.array(lower)
     upper = np.array(upper)
@@ -89,7 +78,7 @@ for (lower, upper) in hsv_bounds:
     # find the colors within the specified boundaries and apply the mask
     mask = cv2.inRange(hsv, lower, upper)
     output = cv2.bitwise_and(
-        single_color_images[i], single_colors[i], mask=mask)
+        single_color_images[i], utils.single_colors[i], mask=mask)
 
     # # comment/uncomment this block to enable/disable output during process
     # # resize the image output window
@@ -109,7 +98,7 @@ for (lower, upper) in hsv_bounds:
 
 # resize the image output window
 comboimg = combineImages(combo)
-result = makeArray(comboimg, single_colors)
+result = makeArray(comboimg, utils.single_colors)
 print(result)
 
 print_to_file(result)
